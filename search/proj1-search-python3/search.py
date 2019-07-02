@@ -106,17 +106,12 @@ def depthFirstSearch(problem):
             visited.add(cur_state)
 
             if problem.isGoalState(cur_state):
-                print('FOUND!!!!!')
-
                 return cur_action_list
 
             neighbours = problem.getSuccessors(cur_state)
-            print('Done')
-            print('Neighbours {}'.format(neighbours))
 
             for place in neighbours:
-                print('Pushing')
-                fringe.push([place[0], cur_action_list+[place[1]]])
+                fringe.push([place[0], cur_action_list + [place[1]]])
 
     return ['Stop']
 
@@ -128,7 +123,6 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     fringe = util.Queue()
-
     # Push the state and action list needed to get to that state
     # Initially action list is [] as we are at the start state
     fringe.push([problem.getStartState(), []])
@@ -143,16 +137,11 @@ def breadthFirstSearch(problem):
             visited.add(cur_state)
 
             if problem.isGoalState(cur_state):
-                print('FOUND!!!!!')
-
                 return cur_action_list
 
             neighbours = problem.getSuccessors(cur_state)
-            print('Done')
-            print('Neighbours {}'.format(neighbours))
 
             for place in neighbours:
-                print('Pushing')
                 fringe.push([place[0], cur_action_list + [place[1]]])
 
     return ['Stop']
@@ -177,21 +166,14 @@ def uniformCostSearch(problem):
             visited.add(cur_state)
 
             if problem.isGoalState(cur_state):
-                print('FOUND!!!!!')
-
                 return cur_action_list
 
             neighbours = problem.getSuccessors(cur_state)
-            print('Done')
-            print('Neighbours {}'.format(neighbours))
 
             for place in neighbours:
-                print('Pushing')
-                fringe.push([place[0], cur_action_list + [place[1]], cost+place[2]], cost+place[2])
+                fringe.push([place[0], cur_action_list + [place[1]], cost + place[2]], cost + place[2])
 
     return ['Stop']
-
-    util.raiseNotDefined()
 
 
 def nullHeuristic(state, problem=None):
@@ -205,7 +187,32 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = util.PriorityQueue()
+
+    # Push the state and action list needed to get to that state and the cost of reaching that state from the source
+    # Initially action list is [] as we are at the start state
+    fringe.push([problem.getStartState(), [], 0], 0)
+
+    # Set to mark states which have been visited so don't end up going in cycles.
+    visited = set()
+
+    while not fringe.isEmpty():
+        cur_state, cur_action_list, cost = fringe.pop()
+
+        if cur_state not in visited:
+            visited.add(cur_state)
+
+            if problem.isGoalState(cur_state):
+
+                return cur_action_list
+
+            neighbours = problem.getSuccessors(cur_state)
+
+            for place in neighbours:
+                fringe.push([place[0], cur_action_list + [place[1]], cost + place[2]],
+                            cost + place[2] + heuristic(place[0], problem))
+
+    return ['Stop']
 
 
 # Abbreviations
