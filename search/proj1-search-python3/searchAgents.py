@@ -514,7 +514,7 @@ def foodHeuristic(state, problem):
 
     for f in foods[1:]:
         dist = util.manhattanDistance(f, state[0])
-        if dist < max_dist:
+        if dist > max_dist:
             max_dist = dist
 
     return max_dist
